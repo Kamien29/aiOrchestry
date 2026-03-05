@@ -36,27 +36,38 @@ export default function App() {
     setError(null);
     setLoading(true);
     setSteps([]);
-
+    
     try {
       for (let i = 0; i < agents.length; i++) {
-        const prompt = `Napisz poprawną polszczyzną tylko jeden krok przepisu na ciasto orzechowe.
-To jest krok numer ${i + 1} z 6.`;
+        const previousSteps = steps
 
-        const response = await fetch("http://localhost:11434/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "SpeakLeash/bielik-7b-instruct-v0.1-gguf:Q6_K",
-            messages: [
-              { role: "system", content: agents[i].system },
-              { role: "user", content: prompt },
-            ],
-            // dla Ollama: wyłącz streaming, żeby dostać pojedynczy JSON
-            stream: false,
-          }),
-        });
+  .map((s, idx) => `${idx + 1}. ${s}`)
+  .join("\n");
+
+
+  const prompt = `
+Napisz poprawną polszczyzną tylko jeden krok przepisu na ciasto orzechowe.
+To jest krok numer ${i + 1} z 6.  
+
+Dotychczasowe kroki przepisu:
+${previousSteps || "Brak – to pierwszy krok."}
+
+Twój krok musi być logicznie spójny z powyższymi i kontynuować przepis.
+${agents[i].system}
+`;
+
+const response = await fetch("http://localhost:11434/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "SpeakLeash/bielik-7b-instruct-v0.1-gguf:Q6_K",
+      messages: [
+        { role: "system", content: agents[i].system },
+        { role: "user", content: prompt },
+      ],
+      stream: false,
+    }),
+  });
 
         if (!response.ok) {
           throw new Error(`Błąd API: ${response.status}`);

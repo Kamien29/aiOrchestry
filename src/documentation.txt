@@ -1,0 +1,49 @@
+# System Multi‑Agent AI – Przepis na ciasto orzechowe
+
+Aplikacja webowa w React, demonstrująca **system multi‑agentowy**, w którym kilku „agentów” o różnych rolach (np. militarny, cywilny, morski) generuje kolejne kroki przepisu na ciasto orzechowe, komunikując się z lokalnie uruchomionym modelem językowym przez API `http://localhost:11434`.
+
+## Technologia
+
+- **React** (Create React App, `react-scripts`)
+- **JavaScript (ES6+)**
+- Integracja z lokalnym API modelu językowego (np. Ollama) pod adresem `http://localhost:11434/api/chat`
+
+## Funkcjonalności
+
+- **Lista agentów** o różnych „personach”:
+  - `Militarny` – pisze rozkazującym stylem
+  - `Cywilny` – spokojny domowy kucharz
+  - `Morski` – kucharz na statku
+  - `Lądowy` – kucharz polowy
+  - `Wywiad` – analityk wywiadu opisujący operację
+  - `Neutralny` – neutralny asystent kuchenny
+- **Generowanie przepisu krok po kroku**:
+  - Każdy agent generuje **jeden krok** przepisu na ciasto orzechowe.
+  - W sumie powstaje 6 kroków – każdy pisany w innym stylu.
+- **Obsługa odpowiedzi API**:
+  - Żądania `POST` na `http://localhost:11434/api/chat` z parametrami:
+    - `model`: `SpeakLeash/bielik-7b-instruct-v0.1-gguf:Q6_K`
+    - `messages`: rola `system` (persona agenta) i rola `user` (polecenie wygenerowania konkretnego kroku)
+    - `stream: false` – oczekujemy pojedynczego JSON-a
+  - Zabezpieczenie na wypadek, gdy serwer zwróci kilka JSON-ów w strumieniu (parsowanie ostatniej niepustej linii).
+- **Nowoczesny interfejs**:
+  - Jednostronicowy layout z kartami dla kroków.
+  - Wyświetlanie statusu ładowania, błędów komunikacji i opisów agentów.
+
+## Wymagania wstępne
+
+- Node.js (zalecane LTS, np. 18.x lub 20.x)
+- Menedżer pakietów `npm` (instalowany razem z Node.js)
+- Działające lokalne API modelu językowego pod adresem:
+  - `http://localhost:11434/api/chat`
+  - z modelem `SpeakLeash/bielik-7b-instruct-v0.1-gguf:Q6_K`
+
+> Uwaga: Projekt zakłada, że serwer modelu (np. Ollama lub inne środowisko obsługujące ten model) jest już uruchomiony lokalnie i dostępny bez CORS‑owych problemów z przeglądarki.
+
+## Instalacja
+
+1. Sklonuj repozytorium lub skopiuj projekt do lokalnego katalogu.
+2. Zainstaluj zależności:
+
+   ```bash
+   npm install
