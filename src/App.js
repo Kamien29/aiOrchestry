@@ -46,6 +46,7 @@ export default function App() {
 
 
   const prompt = `
+  ${agents[i].system}.
 Napisz poprawną polszczyzną tylko jeden krok przepisu na ciasto orzechowe.
 To jest krok numer ${i + 1} z 6.  
 
@@ -53,8 +54,9 @@ Dotychczasowe kroki przepisu:
 ${previousSteps || "Brak – to pierwszy krok."}
 
 Twój krok musi być logicznie spójny z powyższymi i kontynuować przepis.
-${agents[i].system}
+
 `;
+console.log(prompt);
 
 const response = await fetch("http://localhost:11434/api/chat", {
     method: "POST",
