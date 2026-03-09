@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-const API_URL = "http://ollama:11434/api/chat";
-const MODEL = "SpeakLeash/bielik-7b-instruct-v0.1-gguf:Q6_K";
-
+const API_URL =
+  process.env.REACT_APP_API_URL || "http://ollama:11434/api/chat";
+const MODEL = "llama3.2";
 const AGENTS = [
   { name: "Militarny", system: "Jesteś wojskowym instruktorem. Pisz rozkazującym stylem." },
   { name: "Cywilny", system: "Jesteś domowym kucharzem. Pisz spokojnie." },

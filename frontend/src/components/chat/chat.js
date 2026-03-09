@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 
-const API_URL = "http://localhost:11434/api/chat";
-const MODEL = "SpeakLeash/bielik-7b-instruct-v0.1-gguf:Q6_K";
-
+const API_URL =
+  process.env.REACT_APP_API_URL || "http://ollama:11434/api/chat";
+const MODEL = "llama3.2";
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
