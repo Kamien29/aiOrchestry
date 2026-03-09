@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const API_URL =
-  process.env.REACT_APP_API_URL || "http://ollama:11434/api/chat";
+  process.env.REACT_APP_API_URL || "http://localhost:11434/api/chat";
 const MODEL = "llama3.2";
 const AGENTS = [
   { name: "Militarny", system: "Jesteś wojskowym instruktorem. Pisz rozkazującym stylem." },
