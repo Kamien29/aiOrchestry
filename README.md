@@ -1,64 +1,102 @@
-Requirements
+Przepis – Multi‑agentowy frontend + Ollama (Docker)
 
-Make sure the following tools are installed:
+### Wymagania
 
-Docker
+- **Docker / Docker Desktop**
+- **Docker Compose** (w zestawie z nowszym Docker Desktop)
 
-Node.js
+Opcjonalnie, do lokalnego developmentu bez Dockera:
 
-npm
+- **Node.js**
+- **npm**
 
-Git
+Sprawdzenie instalacji:
 
-You can verify the installation with:
-
+```bash
 docker --version
 node -v
 npm -v
-Running the Project
-1. Start Ollama with Docker
+```
 
-Pull the Ollama image:
+---
 
-docker pull ollama/ollama
+### Struktura projektu
 
-Run the container:
+- **backend (Ollama)**: uruchamiany w kontenerze `ollama` z obrazu `ollama/ollama`
+- **frontend (React)**: aplikacja w katalogu `frontend`, uruchamiana w kontenerze `react-ai`
+- **docker-compose.yml**: definicja obu usług (Ollama + frontend)
 
-docker run -d -p 11434:11434 --name ollama ollama/ollama
-2. Download the Bielik Model
+Frontend komunikuje się z Ollamą przez HTTP pod adresem:
 
-Download the model inside the container:
+- `http://localhost:11434/api/chat`
 
-docker exec -it ollama ollama pull SpeakLeash/bielik-7b-instruct
+---
 
-Check if the model is installed:
+### Uruchomienie projektu w Dockerze (rekomendowane)
 
-docker exec -it ollama ollama list
-3. Start the Frontend
+1. **Przejdź do katalogu projektu**
 
-Go to the frontend directory:
+```bash
+cd przepis
+```
 
+2. **Zbuduj obrazy**
+
+```bash
+docker compose build
+```
+
+3. **Uruchom kontenery**
+
+```bash
+docker compose up
+```
+
+Po chwili powinny działać dwa serwisy:
+
+- `ollama` – API modeli (`http://localhost:11434`)
+- `react-ai` – frontend (`http://localhost:3000`)
+
+4. **Otwórz aplikację w przeglądarce**
+
+Przejdź do:
+
+- `http://localhost:3000`
+
+---
+
+### Konfiguracja modelu Ollama
+
+Kontener Ollama startuje z obrazu `ollama/ollama`. Aby pobrać model (np. Bielik), wejdź do kontenera i pobierz go:
+
+```bash
+docker exec -it ollama bash
+ollama pull SpeakLeash/bielik-7b-instruct
+ollama list
+```
+
+Po zainstalowaniu modelu frontend będzie mógł z niego korzystać przez endpoint `/api/chat`.
+
+---
+
+### Lokalny development bez Dockera (opcjonalnie)
+
+Jeśli chcesz rozwijać tylko frontend lokalnie:
+
+1. Upewnij się, że Ollama działa lokalnie na porcie `11434`
+2. W drugim terminalu uruchom frontend:
+
+```bash
 cd frontend
-
-Install dependencies:
-
 npm install
-
-Start the application:
-
 npm start
-4. Open the Application
+```
 
-Open the browser and go to:
+Frontend jest dostępny pod `http://localhost:3000` i łączy się z API Ollamy na `http://localhost:11434/api/chat`.
 
-http://localhost:3000
-5. Check Ollama API
+---
 
-You can verify that Ollama is running at:
+### Porty
 
-http://localhost:11434
-Ports Used
-
-3000 – Frontend application
-
-11434 – Ollama API
+- **3000** – aplikacja frontendowa (React)
+- **11434** – API Ollama
