@@ -1,16 +1,16 @@
-Przepis – Multi‑agentowy frontend + Ollama (Docker)
+Przepis – Multi‑agent Frontend + Ollama (Docker)
 
-### Wymagania
+### Requirements
 
 - **Docker / Docker Desktop**
-- **Docker Compose** (w zestawie z nowszym Docker Desktop)
+- **Docker Compose** (comes with newer Docker Desktop)
 
-Opcjonalnie, do lokalnego developmentu bez Dockera:
+Optional, for local development without Docker:
 
 - **Node.js**
 - **npm**
 
-Sprawdzenie instalacji:
+Check installation:
 
 ```bash
 docker --version
@@ -20,54 +20,54 @@ npm -v
 
 ---
 
-### Struktura projektu
+### Project structure
 
-- **backend (Ollama)**: uruchamiany w kontenerze `ollama` z obrazu `ollama/ollama`
-- **frontend (React)**: aplikacja w katalogu `frontend`, uruchamiana w kontenerze `react-ai`
-- **docker-compose.yml**: definicja obu usług (Ollama + frontend)
+- **backend (Ollama)**: runs in the `ollama` container from the `ollama/ollama` image
+- **frontend (React)**: app in the `frontend` directory, runs in the `react-ai` container
+- **docker-compose.yml**: definition of both services (Ollama + frontend)
 
-Frontend komunikuje się z Ollamą przez HTTP pod adresem:
+The frontend talks to Ollama over HTTP at:
 
 - `http://localhost:11434/api/chat`
 
 ---
 
-### Uruchomienie projektu w Dockerze (rekomendowane)
+### Run the project with Docker (recommended)
 
-1. **Przejdź do katalogu projektu**
+1. **Go to the project directory**
 
 ```bash
 cd przepis
 ```
 
-2. **Zbuduj obrazy**
+2. **Build images**
 
 ```bash
 docker compose build
 ```
 
-3. **Uruchom kontenery**
+3. **Start containers**
 
 ```bash
 docker compose up
 ```
 
-Po chwili powinny działać dwa serwisy:
+After a moment, two services should be running:
 
-- `ollama` – API modeli (`http://localhost:11434`)
+- `ollama` – model API (`http://localhost:11434`)
 - `react-ai` – frontend (`http://localhost:3000`)
 
-4. **Otwórz aplikację w przeglądarce**
+4. **Open the app in your browser**
 
-Przejdź do:
+Go to:
 
 - `http://localhost:3000`
 
 ---
 
-### Konfiguracja modelu Ollama
+### Ollama model configuration
 
-Kontener Ollama startuje z obrazu `ollama/ollama`. Aby pobrać model (np. Bielik), wejdź do kontenera i pobierz go:
+The Ollama container starts from the `ollama/ollama` image. To download a model (e.g. Bielik), enter the container and pull it:
 
 ```bash
 docker exec -it ollama bash
@@ -75,16 +75,16 @@ ollama pull SpeakLeash/bielik-7b-instruct
 ollama list
 ```
 
-Po zainstalowaniu modelu frontend będzie mógł z niego korzystać przez endpoint `/api/chat`.
+Once the model is installed, the frontend can use it via the `/api/chat` endpoint.
 
 ---
 
-### Lokalny development bez Dockera (opcjonalnie)
+### Local development without Docker (optional)
 
-Jeśli chcesz rozwijać tylko frontend lokalnie:
+If you want to develop only the frontend locally:
 
-1. Upewnij się, że Ollama działa lokalnie na porcie `11434`
-2. W drugim terminalu uruchom frontend:
+1. Make sure Ollama is running locally on port `11434`
+2. In another terminal, start the frontend:
 
 ```bash
 cd frontend
@@ -92,11 +92,11 @@ npm install
 npm start
 ```
 
-Frontend jest dostępny pod `http://localhost:3000` i łączy się z API Ollamy na `http://localhost:11434/api/chat`.
+The frontend is available at `http://localhost:3000` and connects to the Ollama API at `http://localhost:11434/api/chat`.
 
 ---
 
-### Porty
+### Ports
 
-- **3000** – aplikacja frontendowa (React)
-- **11434** – API Ollama
+- **3000** – frontend application (React)
+- **11434** – Ollama API
